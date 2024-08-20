@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confidence Interval Calculator</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0e6f6;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #6a0dad;
+            color: #fff;
+            padding: 10px 0;
+            text-align: center;
+        }
+        nav {
+            background-color: #5a00a0;
+            padding: 10px;
+            text-align: center;
+        }
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+        }
+        nav a:hover {
+            text-decoration: underline;
+        }
+        section {
+            padding: 20px;
+        }
+        .calculator {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+        }
+        button {
+            background-color: #6a0dad;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #5a00a0;
+        }
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 150px;
+        }
+        p {
+            margin: 10px 0;
+        }
+        hr {
+            border: 0;
+            border-top: 1px solid #ddd;
+            margin: 20px 0;
+        }
+        #result, #t_score_result, #margin_error_result, #sample_size_result {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Statistical Calculators</h1>
+</header>
+
+<nav>
+    <a href="#confidenceInterval">Confidence Interval Calculator</a>
+    <a href="#sampleSizeCalculator">Sample Size Calculator</a>
+</nav>
+
+<section id="confidenceInterval" class="calculator">
+    <h2>Confidence Interval Calculator</h2>
+    <form id="confidenceIntervalForm">
+        <p>Sample Mean (X̄): <input type="text" id="mean" size="10"></p>
+        <p>Standard Deviation (σ): <input type="text" id="std_dev" size="10"></p>
+        <p>Sample Size (n): <input type="text" id="sample_size" size="10"></p>
+        <p>Confidence Level (%): <input type="text" id="confidence_level" size="10" placeholder="e.g., 95"></p>
+        <p><button type="button" onclick="calculateCI()">Calculate Confidence Interval</button></p>
+        <p id="result"></p>
+        <p id="t_score_result"></p>
+        <p id="margin_error_result"></p>
+    </form>
+    <hr>
+    <h2>Calculate Required Sample Size</h2>
+    <form id="sampleSizeForm">
+        <p>Desired Margin of Error (E): <input type="text" id="desired_margin_error" size="10"></p>
+        <p>Standard Deviation (σ): <input type="text" id="std_dev_size" size="10"></p>
+        <p>Confidence Level (%): <input type="text" id="confidence_level_size" size="10" placeholder="e.g., 95"></p>
+        <p><button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button></p>
+        <p id="sample_size_result"></p>
+    </form>
+</section>
+
+<script>
+    function calculateCI() {
+        var mean = parseFloat(document.getElementById("mean").value);
+        var stdDev = parseFloat(document.getElementById("std_dev").value);
+        var sampleSize = parseInt(document.getElementById("sample_size").value);
+        var confidenceLevel = parseFloat(document.getElementById("confidence_level").value);
+
+        // Calculate the t-score for small sample sizes
+        var tScore = jStat.studentt.inv(1 - (1 - confidenceLevel / 100) / 2, sampleSize - 1);
+
+        // Calculate the margin of error
+        var marginOfError = tScore * (stdDev / Math.sqrt(sampleSize));
+        var lowerBound = mean - marginOfError;
+        var upperBound = mean + marginOfError;
+
+        // Display results
+        document.getElementById("result").innerHTML = "The confidence interval is [" + lowerBound.toFixed(4) + ", " + upperBound.toFixed(4) + "]";
+        document.getElementById("t_score_result").innerHTML = "The t-score is: " + tScore.toFixed(4);
+        document.getElementById("margin_error_result").innerHTML = "The margin of error is: " + marginOfError.toFixed(4);
+    }
+
+    function calculateSampleSize() {
+        var desiredMarginError = parseFloat(document.getElementById("desired_margin_error").value);
+        var stdDev = parseFloat(document.getElementById("std_dev_size").value);
+        var confidenceLevel = parseFloat(document.getElementById("confidence_level_size").value);
+
+        // Calculate the z-score corresponding to the confidence level
+        var zScore = jStat.normal.inv(1 - (1 - confidenceLevel / 100) / 2, 0, 1);
+        zScore = parseFloat(zScore.toFixed(4));
+
+        // Calculate the required sample size
+        var sampleSize = Math.ceil(Math.pow((zScore * stdDev) / desiredMarginError, 2));
+
+        // Display result
+        document.getElementById("sample_size_result").innerHTML = "The required sample size is: " + sampleSize;
+    }
+</script>
+
+</body>
+</html>
