@@ -3,37 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confidence Interval Calculator</title>
+    <title>Statistical Calculators</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstat/1.9.4/jstat.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0e6f6;
             margin: 0;
             padding: 0;
+            display: flex;
         }
         header {
             background-color: #6a0dad;
             color: #fff;
             padding: 10px 0;
             text-align: center;
+            flex: 1;
         }
-        nav {
+        .sidebar {
             background-color: #5a00a0;
-            padding: 10px;
-            text-align: center;
+            color: #fff;
+            width: 220px;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
         }
-        nav a {
+        .sidebar h2 {
+            margin-top: 0;
+        }
+        .sidebar a {
             color: #fff;
             text-decoration: none;
-            margin: 0 15px;
-            font-weight: bold;
+            display: block;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
         }
-        nav a:hover {
-            text-decoration: underline;
+        .sidebar a:hover {
+            background-color: #6a0dad;
         }
-        section {
+        .content {
+            margin-left: 240px;
             padding: 20px;
+            flex: 1;
         }
         .calculator {
             margin: 20px auto;
@@ -79,33 +93,36 @@
     <h1>Statistical Calculators</h1>
 </header>
 
-<nav>
+<div class="sidebar">
+    <h2>Menu</h2>
     <a href="#confidenceInterval">Confidence Interval Calculator</a>
     <a href="#sampleSizeCalculator">Sample Size Calculator</a>
-</nav>
+</div>
 
-<section id="confidenceInterval" class="calculator">
-    <h2>Confidence Interval Calculator</h2>
-    <form id="confidenceIntervalForm">
-        <p>Sample Mean (X̄): <input type="text" id="mean" size="10"></p>
-        <p>Standard Deviation (σ): <input type="text" id="std_dev" size="10"></p>
-        <p>Sample Size (n): <input type="text" id="sample_size" size="10"></p>
-        <p>Confidence Level (%): <input type="text" id="confidence_level" size="10" placeholder="e.g., 95"></p>
-        <p><button type="button" onclick="calculateCI()">Calculate Confidence Interval</button></p>
-        <p id="result"></p>
-        <p id="t_score_result"></p>
-        <p id="margin_error_result"></p>
-    </form>
-    <hr>
-    <h2>Calculate Required Sample Size</h2>
-    <form id="sampleSizeForm">
-        <p>Desired Margin of Error (E): <input type="text" id="desired_margin_error" size="10"></p>
-        <p>Standard Deviation (σ): <input type="text" id="std_dev_size" size="10"></p>
-        <p>Confidence Level (%): <input type="text" id="confidence_level_size" size="10" placeholder="e.g., 95"></p>
-        <p><button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button></p>
-        <p id="sample_size_result"></p>
-    </form>
-</section>
+<div class="content">
+    <section id="confidenceInterval" class="calculator">
+        <h2>Confidence Interval Calculator</h2>
+        <form id="confidenceIntervalForm">
+            <p>Sample Mean (X̄): <input type="text" id="mean" size="10"></p>
+            <p>Standard Deviation (σ): <input type="text" id="std_dev" size="10"></p>
+            <p>Sample Size (n): <input type="text" id="sample_size" size="10"></p>
+            <p>Confidence Level (%): <input type="text" id="confidence_level" size="10" placeholder="e.g., 95"></p>
+            <p><button type="button" onclick="calculateCI()">Calculate Confidence Interval</button></p>
+            <p id="result"></p>
+            <p id="t_score_result"></p>
+            <p id="margin_error_result"></p>
+        </form>
+        <hr>
+        <h2>Calculate Required Sample Size</h2>
+        <form id="sampleSizeForm">
+            <p>Desired Margin of Error (E): <input type="text" id="desired_margin_error" size="10"></p>
+            <p>Standard Deviation (σ): <input type="text" id="std_dev_size" size="10"></p>
+            <p>Confidence Level (%): <input type="text" id="confidence_level_size" size="10" placeholder="e.g., 95"></p>
+            <p><button type="button" onclick="calculateSampleSize()">Calculate Sample Size</button></p>
+            <p id="sample_size_result"></p>
+        </form>
+    </section>
+</div>
 
 <script>
     function calculateCI() {
